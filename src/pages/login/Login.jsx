@@ -60,38 +60,37 @@ export default class Login extends Component {
 							4). 必须是英文、数字、下划线组成
 						*/
 						}
-              <Form
-                className="login-form"
-                onFinish={this.onFinish}
+          <Form
+            className="login-form"
+            onFinish={this.onFinish}
+          >
+            <Item name="username"
+              rules={[//声明式校验
+                {required:true,message:'用户名必须输入！'},
+                {min:4,message:'用户名必须大于等于4位！'},
+                {max:12,message:'用户名必须小于等于12位！'},
+                {pattern:/^\w+$/,message:'用户名必须是英文、数字、下划线组成！'}
+              ]}
               >
-                <Item
-                  name="username"
-                  rules={[//声明式校验
-                    {required:true,message:'用户名必须输入！'},
-                    {min:4,message:'用户名必须大于等于4位！'},
-                    {max:12,message:'用户名必须小于等于12位！'},
-                    {pattern:/^\w+$/,message:'用户名必须是英文、数字、下划线组成！'}
-                  ]}
-                  >
-                  <Input 
-                  prefix={<UserOutlined className="site-form-item-icon" />} 
-                  placeholder="用户名" />
-                </Item>
-                <Item name="password" 
-                  rules={[{validator:this.pwdValidator}]}>
-                  <Input
-                    prefix={<LockOutlined className="site-form-item-icon" />}
-                    type="password"
-                    placeholder="密码"
-                  />
-                </Item>
+              <Input 
+              prefix={<UserOutlined className="site-form-item-icon" />} 
+              placeholder="用户名" />
+            </Item>
+            <Item name="password" 
+              rules={[{validator:this.pwdValidator}]}>
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                type="password"
+                placeholder="密码"
+              />
+            </Item>
 
-                <Item>
-                  <Button type="primary" htmlType="submit" className="login-form-button">
-                    Login
-                  </Button>
-                </Item>
-              </Form>
+            <Item>
+              <Button type="primary" htmlType="submit" className="login-form-button">
+                Login
+              </Button>
+            </Item>
+          </Form>
 				</section>
 			</div>
     )
