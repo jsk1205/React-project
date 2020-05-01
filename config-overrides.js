@@ -1,5 +1,5 @@
-const { override, fixBabelImports,addLessLoader} = require('customize-cra');
-
+const { override, fixBabelImports,addLessLoader,addWebpackAlias} = require('customize-cra');
+const { resolve } = require("path"); //path:nodejs内置的库
 module.exports = override(
 	fixBabelImports('import', {
 		libraryName: 'antd',
@@ -10,4 +10,7 @@ module.exports = override(
 		javascriptEnabled: true,
 		modifyVars: { '@primary-color': '#1DA57A' },
 	 }),
+	 addWebpackAlias({
+		"@": resolve(__dirname, "src")
+	})
 );

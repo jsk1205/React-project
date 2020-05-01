@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Form, Input, Button } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import {reqLogin} from "../../api"
+import {reqLogin} from '@/api'
 import logo from './images/logo.png'
 import './css/login.less'
 
@@ -66,10 +66,10 @@ export default class Login extends Component {
           >
             <Item name="username"
               rules={[//声明式校验
-                {required:true,message:'用户名必须输入！'},
-                {min:4,message:'用户名必须大于等于4位！'},
-                {max:12,message:'用户名必须小于等于12位！'},
-                {pattern:/^\w+$/,message:'用户名必须是英文、数字、下划线组成！'}
+                {required:true,message:'用户名必须输入！'}, //必填项
+								{min:4,message:'用户名必须大于等于4位！'},
+								{max:12,message:'用户名必须小于等于12位！'},
+								{pattern:/^\w+$/,message:'用户名必须是英文、数字、下划线组成！'},
               ]}
               >
               <Input 
