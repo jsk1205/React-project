@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import {connect} from 'react-redux'
+import {saveUserInfo} from "@/redux/actions/login";
 import {reqLogin} from '@/api'
 import logo from './images/logo.png'
 import './css/login.less'
+import { Redirect } from 'react-router-dom';
 
 const {Item}= Form
 
 
 
-export default class Login extends Component {
+ class Login extends Component {
   onFinish = async values=>{//表单提交且验证通过的回调-->
     //自动收集表单里面的数据并形成key-value的组合包装成对象,即values
     //console.log('Received values of form: ', values);
@@ -25,12 +28,20 @@ export default class Login extends Component {
     //)
     //直接成功
     let result =await reqLogin(values)
-    console.log(result)
+    // console.log(result)
       // ajax.post('/login',qs.stringify(values)).then(
       //   response=>{ console.log('成功',response.data)},
       //   err=>{ console.log('失败',err.message)}
       // )
-   
+    const {status,data,msg}=result
+    if (status===0) {
+      message.success('登录成功',1)
+      // console.log(data)
+      this.props.saveUserInfo(data)//存入用户信息同时也存入到localstorage(处理刷新页面redux信息丢失)
+      //this.props.history.replace('/admin')
+    }else{
+      message.error(msg)
+    }
   }
   //自定义校验 (rule, value) => Promise
   pwdValidator =(_,value="")=>{
@@ -43,7 +54,10 @@ export default class Login extends Component {
 		else return Promise.resolve()
 
   }
+  //this.props.history适用于在非render函数中跳转
+	//<Redirect>适用于在render函数中做跳转
 	render() {
+    if(this.props.isLogin)  return <Redirect to="/admin"/>
 		return (
 			<div className="login">
 				<header>
@@ -96,3 +110,8 @@ export default class Login extends Component {
     )
 	}
 }
+
+export default connect(
+  state=>({isLogin:state.userInfo.isLogin}),
+  {saveUserInfo}//操作状态的方法
+)(Login)

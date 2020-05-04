@@ -2,6 +2,8 @@
 import axios from "axios"
 import qs from 'querystring'
 import { message as  msg} from "antd" //弹窗
+import nprogress from 'nprogress'
+import  "nprogress/nprogress.css"
 //axios请求拦截器
     //1.配置基本路径及超时
     //2.请求格式为json,转换为urlencoded
@@ -12,9 +14,10 @@ axios.defaults.baseURL='/api'
 axios.defaults.timeout=2000
 //请求拦截器
 axios.interceptors.request.use((config)=>{
+  nprogress.start()
   //console.log(config)//config里面的data此时还未转换为json格式
   const {method,data}=config
-  console.log(method,data) 
+  //console.log(method,data) 
   //post {username: "admin", password: "admin"}
   //data此时为对象还未转换为json
   // 2.请求格式为json,转换为urlencoded
@@ -26,10 +29,15 @@ axios.interceptors.request.use((config)=>{
 
 //响应拦截器
 axios.interceptors.response.use(
+  
   //成功的回调 状态码2 开头
-  response=>{return response.data},
+  response=>{
+    nprogress.done()
+    return response.data
+  },
   //失败的回调 状态码不是2 开头/超时/网络不通
   err => {
+    nprogress.done()
 		let errmsg = '未知错误，请联系管理员'
 		const {message} = err
 		if(message.indexOf('401') !== -1) errmsg = '未登录或身份过期，请重新登录！'
