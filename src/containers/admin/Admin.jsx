@@ -3,7 +3,10 @@ import {connect} from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import {deteuserInfo} from "../../redux/actions/login"; 
 import { Layout } from 'antd';
-const { Header, Footer, Sider, Content } = Layout;
+import Header from "./Header/Header";
+import './css/admin.less'
+
+const { Footer, Sider, Content } = Layout;
 
 class Admin extends Component {
   // logout=()=>{
