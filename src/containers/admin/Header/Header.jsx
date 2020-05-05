@@ -22,6 +22,12 @@ import  "./css/header.less"
   state={
     isFull:false,
     time:dayjs().format('YYYY年MM月DD日 HH:mm:ss'), //时间
+    weatherData:{}
+  }
+  getWeather= async ()=>{
+    let retult =await reqWeather()
+    const {dayPictureUrl,weather,temperature}=retult
+    this.setState({weatherData:{dayPictureUrl,weather,temperature}})
   }
   fullScreen=()=>{
     // const {isFull}=this.state
@@ -54,14 +60,14 @@ import  "./css/header.less"
     }, 1000);
   
     //请求天气信息
-    reqWeather()
+    //this.getWeather()
   }
   componentWillUnmount(){
 		clearInterval(this.timer)
 	}
   render() {
     const {username}=this.props
-    const {isFull,time}=this.state
+    const {isFull,time,weatherData}=this.state
     return (
       <div className="header">
         <div className="h-top">
@@ -80,8 +86,10 @@ import  "./css/header.less"
           <div className="bot-right">
             <span>{time}</span>
             <img src={log} alt=""/>
-            <span>多云转晴</span>
-            <span>温度：15~25℃</span>
+            {/* <img src={weatherData.dayPictureUrl} alt=""/> */}
+            <span>{weatherData.weather}</span>
+            {/* <span>温度：{weatherData.temperature}</span> */}
+            <span>温度:15~20℃</span>
           </div>
         </div>
       </div>

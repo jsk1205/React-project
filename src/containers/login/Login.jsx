@@ -4,7 +4,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import {connect} from 'react-redux'
 import {saveUserInfo} from "@/redux/actions/login";
 import {reqLogin} from '@/api'
-import logo from './images/logo.png'
+import logo from '@/assets/images/logo.png'
 import './css/login.less'
 import Check from '@/containers/Hoc/Check'
 
