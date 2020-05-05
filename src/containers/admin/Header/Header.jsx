@@ -6,15 +6,22 @@ import {
 	FullscreenExitOutlined,
 	ExclamationCircleOutlined
 } from '@ant-design/icons';
+import dayjs from 'dayjs'
 import { connect } from "react-redux";
+import {reqWeather} from '@/api'
 import {deteuserInfo} from "@/redux/actions/login";
 import  log from "./css/log.jpg";
 import  "./css/header.less"
 
-const { confirm } = Modal;
+ const { confirm } = Modal;
+ @connect(
+  state=>({username:state.userInfo.user.username}),//映射状态 一箭头函数 默认返回对象
+  {deteuserInfo}
+ )
  class Header extends Component {
   state={
-    isFull:false
+    isFull:false,
+    time:dayjs().format('YYYY年MM月DD日 HH:mm:ss'), //时间
   }
   fullScreen=()=>{
     // const {isFull}=this.state
@@ -41,15 +48,27 @@ const { confirm } = Modal;
       const {isFull}=this.state
       this.setState({isFull:!isFull})
     })
+
+    this.timer=setInterval(() => {
+      this.setState({time:dayjs().format('YYYY年MM月DD日 HH:mm:ss')})
+    }, 1000);
+  
+    //请求天气信息
+    reqWeather()
   }
+  componentWillUnmount(){
+		clearInterval(this.timer)
+	}
   render() {
+    const {username}=this.props
+    const {isFull,time}=this.state
     return (
       <div className="header">
         <div className="h-top">
         <Button size="small" onClick={this.fullScreen}>
-        {this.state.isFull ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+        {isFull ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
           </Button>
-          <span className="username">你好,肖战</span>
+    <span className="username">欢迎,{username}</span>
           <Button type="link" size="small"
           onClick={this.logout}
           >退出登录</Button>
@@ -59,7 +78,7 @@ const { confirm } = Modal;
             <span>首页</span>
           </div>
           <div className="bot-right">
-            <span>2020年5月4日</span>
+            <span>{time}</span>
             <img src={log} alt=""/>
             <span>多云转晴</span>
             <span>温度：15~25℃</span>
@@ -69,7 +88,4 @@ const { confirm } = Modal;
     )
   }
 }
-export default connect(
-  state=>({}),//映射状态 一箭头函数 默认返回对象
-  {deteuserInfo}
-)(Header)
+export default Header

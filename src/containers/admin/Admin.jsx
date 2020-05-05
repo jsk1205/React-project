@@ -1,13 +1,20 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import { Redirect } from 'react-router-dom'
 import {deteuserInfo} from "../../redux/actions/login"; 
 import { Layout } from 'antd';
+import Check from "@/containers/Hoc/Check";
 import Header from "./Header/Header";
 import './css/admin.less'
 
 const { Footer, Sider, Content } = Layout;
-
+@connect(
+  state=>({//读取信息
+    username:state.userInfo.user.username,
+    isLogin:state.userInfo.isLogin
+  }),
+  {deteuserInfo}
+)
+@Check
 class Admin extends Component {
   // logout=()=>{
   //   //删除redux中的数据及local中的数据
@@ -24,7 +31,7 @@ class Admin extends Component {
   //   )
   // }
   render(){
-    if (!this.props.isLogin) return <Redirect to="/login"/>
+    // if (!this.props.isLogin) return <Redirect to="/login"/>
     return (
 			<Layout className="admin-container">
 				<Sider>Sider</Sider>
@@ -38,10 +45,4 @@ class Admin extends Component {
   }
 }
 
-export default connect(
-  state=>({//读取信息
-    username:state.userInfo.user.username,
-    isLogin:state.userInfo.isLogin
-  }),
-  {deteuserInfo}
-)(Admin)
+export default Admin

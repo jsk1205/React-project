@@ -6,12 +6,16 @@ import {saveUserInfo} from "@/redux/actions/login";
 import {reqLogin} from '@/api'
 import logo from './images/logo.png'
 import './css/login.less'
-import { Redirect } from 'react-router-dom';
+import Check from '@/containers/Hoc/Check'
 
 const {Item}= Form
 
 
-
+@connect(
+  state=>({isLogin:state.userInfo.isLogin}),
+  {saveUserInfo}//操作状态的方法
+)
+@Check
  class Login extends Component {
   onFinish = async values=>{//表单提交且验证通过的回调-->
     //自动收集表单里面的数据并形成key-value的组合包装成对象,即values
@@ -57,7 +61,7 @@ const {Item}= Form
   //this.props.history适用于在非render函数中跳转
 	//<Redirect>适用于在render函数中做跳转
 	render() {
-    if(this.props.isLogin)  return <Redirect to="/admin"/>
+    // if(this.props.isLogin)  return <Redirect to="/admin"/>
 		return (
 			<div className="login">
 				<header>
@@ -111,7 +115,4 @@ const {Item}= Form
 	}
 }
 
-export default connect(
-  state=>({isLogin:state.userInfo.isLogin}),
-  {saveUserInfo}//操作状态的方法
-)(Login)
+export default Login
