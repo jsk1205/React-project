@@ -15,7 +15,10 @@ import  "./css/header.less"
 
  const { confirm } = Modal;
  @connect(
-  state=>({username:state.userInfo.user.username}),//映射状态 一箭头函数 默认返回对象
+  state=>({
+    username:state.userInfo.user.username,
+    title:state.title
+  }),//映射状态 一箭头函数 默认返回对象
   {deteuserInfo}
  )
  class Header extends Component {
@@ -81,7 +84,7 @@ import  "./css/header.less"
         </div>
         <div className="h-bot">
           <div className="bot-left">
-            <span>首页</span>
+            <span>{this.props.title}</span>
           </div>
           <div className="bot-right">
             <span>{time}</span>
