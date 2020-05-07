@@ -2,6 +2,9 @@
 import axios from "axios"
 import qs from 'querystring'
 import { message as  msg} from "antd" //弹窗
+import store from "@/redux/store"
+import { deteuserInfo } from "@/redux/actions/login";
+import {saveTitle} from '@/redux/actions/title'
 import nprogress from 'nprogress'
 import  "nprogress/nprogress.css"
 //axios请求拦截器
@@ -24,6 +27,12 @@ axios.interceptors.request.use((config)=>{
   if(method.toLowerCase()==='post'&& data instanceof Object){
     config.data=qs.stringify(data)
   }
+  //如果存在token
+  const {token} = store.getState().userInfo
+	if(token){
+		config.headers.Authorization = 'atguigu_'+token
+    //console.log(store.getState().userInfo.token)
+  }
   return config
 })
 
@@ -40,7 +49,13 @@ axios.interceptors.response.use(
     nprogress.done()
 		let errmsg = '未知错误，请联系管理员'
 		const {message} = err
-		if(message.indexOf('401') !== -1) errmsg = '未登录或身份过期，请重新登录！'
+    if(message.indexOf('401') !== -1) {
+    //强制退出回到login然后联系redux删除所有用户数据的信息,强制重新登录
+    store.dispatch(deteuserInfo())
+    store.dispatch(saveTitle(''))
+
+    errmsg = '未登录或身份过期，请重新登录！'
+    }
 		else if(message.indexOf('Network Error') !== -1) errmsg = '网络不通，请检查网络连接！'
 		else if(message.indexOf('timeout') !== -1) errmsg = '网络不稳定，连接超时！'
 		msg.error(errmsg,1)

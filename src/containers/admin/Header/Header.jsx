@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import { connect } from "react-redux";
 import {reqWeather} from '@/api'
 import {deteuserInfo} from "@/redux/actions/login";
+import {saveTitle} from '@/redux/actions/title'
 import  log from "./css/log.jpg";
 import  "./css/header.less"
 
@@ -19,7 +20,7 @@ import  "./css/header.less"
     username:state.userInfo.user.username,
     title:state.title
   }),//映射状态 一箭头函数 默认返回对象
-  {deteuserInfo}
+  {deteuserInfo,saveTitle}
  )
  class Header extends Component {
   state={
@@ -47,7 +48,8 @@ import  "./css/header.less"
 			cancelText:'取消',
 			okText:'确认',
 			onOk:()=> { //确定按钮的回调
-				this.props.deteuserInfo()
+        this.props.deteuserInfo()
+        this.props.saveTitle('')
 			}
 		});
   }

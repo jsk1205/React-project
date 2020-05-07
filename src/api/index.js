@@ -22,6 +22,5 @@ import {CITY,WEATHER_AK} from '../config'
         }
 		})
 	})
-   
-  
  }
+ export const reqCategoryList = () => ajax.get('/manage/category/list')
