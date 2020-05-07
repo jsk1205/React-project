@@ -13,7 +13,7 @@ let initState={
   user:_user||{},
   token:_token||'',
   isLogin:_user&&_token ?true:false 
-  //可能有两种情况：空 如果local里有，就以local中的为准
+  //initState可能有两种情况：空 如果local里有，就以local中的为准
 }//定义一个初始化状态
 export default function (preState=initState,action) {
   const {type,data}=action
