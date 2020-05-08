@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { Card,Button,Table,Modal,Form,Input} from "antd";
+import { Card,Button,Table,Modal,Form,Input,message} from "antd";
 // import { reqCategoryList } from "@/api";
 import {PlusCircleOutlined} from '@ant-design/icons';
 import { connect } from "react-redux";
 import { catrgoryAsync } from "@/redux/actions/category";
+import { reqAddCategory } from "@/api";
+
 const {Item} = Form
 @connect(
   state=>({categoryList:state.categoryList}),
@@ -11,22 +13,58 @@ const {Item} = Form
 )
  class Category extends Component {
   state = { visible: false };
-  showModal = () => {//展示弹窗
+  showModal = (categoryObj) => {//展示弹窗-->修改分类-->传入参数修改
+    //console.log(categoryObj)
+    const {categoryForm}=this.refs
+     this._id =''
+     this.name=''
+     this.isUpdate=false
+     const {_id,name}=categoryObj
+     if(_id && name){
+      this._id =_id,
+      this.name=name,
+      this.isUpdate=true
+     }
     this.setState({
       visible: true,
     });
   };
 
-  handleOk = () => {//确认的回调
-    this.setState({
-      visible: false,
-    });
+  handleOk = async() => {//确认的回调
+    //1.获得表单实例
+    const {categoryForm}=this.refs
+    //console.log(categoryForm.getFieldsValue())//category: "肖战"
+    //因为 item 里面的name 
+    const {name}=categoryForm.getFieldsValue()
+    //2.校验数据
+    if(!name || !name.trim()){
+      message.error('输入不能为空',1)
+    }else{
+      //合法输入 添加/修改 请求分类
+      let result= await reqAddCategory(name)
+      const {status,msg}=result
+      if(status===0){
+        message.success('添加成功')
+        //再次请求分类列表,加在最前方
+        this.props.catrgoryAsync()
+         //3.隐藏弹窗
+        this.setState({ visible: false});
+        //4.重置表单
+        categoryForm.resetFields()
+      }else{
+        message.error('添加失败',msg)
+      }
+
+    }
+   
   };
 
   handleCancel = ()=> {//取消的回调
+    const {categoryForm}=this.refs
     this.setState({
       visible: false,
     });
+    categoryForm.resetFields()
   };
   //同步action
   // getCategoryList=async()=>{
@@ -54,7 +92,8 @@ const {Item} = Form
       {
         title: '操作',
         //dataIndex: 'name',
-        render:()=><Button type="link"> 修改分类</Button>,
+        render:(categoryObj)=><Button onClick={()=>{
+          this.showModal(categoryObj)}} type="link"> 修改分类</Button>,
         align:'center',
         key: '2',
       },
@@ -84,9 +123,9 @@ const {Item} = Form
         okText="确定"
         cancelText="取消"
       >
-        <Form>
+        <Form ref="categoryForm">
           <Item
-            name="category"
+            name="name"
             rules={[
               {required:true,message:'分类名必须输入'}
             ]}

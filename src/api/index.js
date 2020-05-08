@@ -24,3 +24,4 @@ import {CITY,WEATHER_AK} from '../config'
 	})
  }
  export const reqCategoryList = () => ajax.get('/manage/category/list')
+ export const reqAddCategory=(categoryName)=>ajax.post('manage/category/add',{categoryName})
