@@ -4,7 +4,7 @@ import { Card,Button,Table,Modal,Form,Input,message} from "antd";
 import {PlusCircleOutlined} from '@ant-design/icons';
 import { connect } from "react-redux";
 import { catrgoryAsync } from "@/redux/actions/category";
-import { reqAddCategory } from "@/api";
+import { reqAddCategory,reqUpdateCategory } from "@/api";
 
 const {Item} = Form
 @connect(
@@ -13,38 +13,51 @@ const {Item} = Form
 )
  class Category extends Component {
   state = { visible: false };
+
   showModal = (categoryObj) => {//展示弹窗-->修改分类-->传入参数修改
-    //console.log(categoryObj)
-    const {categoryForm}=this.refs
+    //console.log(this.refs.categoryForm)
+    //console.log(categoryObj)//{_id: "5dcd14b8b4441631746ee493", name: "智能手表", __v: 0}
      this._id =''
      this.name=''
      this.isUpdate=false
      const {_id,name}=categoryObj
      if(_id && name){
-      this._id =_id,
-      this.name=name,
+      //修改的话用于回显-->需要存下id name(不将其存放在状态里面,而是往自身实例上挂)
+      this._id=_id
+      this.name=name
       this.isUpdate=true
+      
      }
+     if(this.refs.categoryForm){
+      this.refs.categoryForm.setFieldsValue({name:this.name})
+    }
     this.setState({
       visible: true,
     });
   };
 
-  handleOk = async() => {//确认的回调
+  handleOk = async() => {//确认的回调(修改/添加 共用的回调)
     //1.获得表单实例
     const {categoryForm}=this.refs
     //console.log(categoryForm.getFieldsValue())//category: "肖战"
     //因为 item 里面的name 
     const {name}=categoryForm.getFieldsValue()
     //2.校验数据
+    
     if(!name || !name.trim()){
       message.error('输入不能为空',1)
     }else{
+      let result 
       //合法输入 添加/修改 请求分类
-      let result= await reqAddCategory(name)
+      if(!this.isUpdate){
+        result= await reqAddCategory(name)
+      }else{
+        result= await reqUpdateCategory(this._id,name)
+      }
+      
       const {status,msg}=result
       if(status===0){
-        message.success('添加成功')
+        message.success(this.isUpdate? '修改成功':'添加成功')
         //再次请求分类列表,加在最前方
         this.props.catrgoryAsync()
          //3.隐藏弹窗
@@ -52,7 +65,7 @@ const {Item} = Form
         //4.重置表单
         categoryForm.resetFields()
       }else{
-        message.error('添加失败',msg)
+        message.error(msg,1)
       }
 
     }
@@ -110,27 +123,27 @@ const {Item} = Form
            columns={columns} 
            bordered
            rowKey="_id" 
-           paginatio={{//分页器
+           pagination={{//分页器
              pageSize:5
            }} 
            />
         </Card>
         <Modal
-        title="新增分类"
+        title={this.isUpdate? '修改分类':'新增分类'}
         visible={this.state.visible}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
         okText="确定"
         cancelText="取消"
       >
-        <Form ref="categoryForm">
+        <Form ref="categoryForm" initialValues={{name:this.name}}>
           <Item
             name="name"
             rules={[
               {required:true,message:'分类名必须输入'}
             ]}
           >
-            <Input placeholder="请输入分类名"/>
+            <Input  placeholder="请输入分类名"/>
           </Item>
         </Form>
       </Modal>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link,withRouter } from "react-router-dom";
+import { NavLink,withRouter } from "react-router-dom";
 import {Menu} from 'antd';
 import {connect} from 'react-redux'
 import {saveTitle} from '@/redux/actions/title'
@@ -24,10 +24,10 @@ class LeftNav extends Component {
         //如果没有 返回打不开的菜单
         return (
           <Item key={menuObj.key} onClick={()=>{this.saveTitle(menuObj.title)}}>
-            <Link to={menuObj.path}>
+            <NavLink to={menuObj.path}>
               {<menuObj.icon/>}
               {menuObj.title}
-            </Link>
+            </NavLink>
           </Item>
         )
       }else{
@@ -44,7 +44,8 @@ class LeftNav extends Component {
   //  console.log(pathname)
    let currentKey=pathname.split('/').slice(-1)[0]
   //  console.log(currentKey)
-  if(currentKey==='admin') currentKey = 'home' //解决退出登录之后在登录不能正常显示标题首页中文的问题
+  if(currentKey === 'admin') currentKey = 'home'//解决退出登录之后在登录不能正常显示标题首页中文的问题
+  if(pathname.indexOf('product')) currentKey = 'product' 
   let title=''
   //拿着key 去和菜单中的title做对比
   menus.forEach((menuObj)=>{
@@ -68,9 +69,10 @@ class LeftNav extends Component {
     // console.log(this.props)
     const {pathname}=this.props.location
     // console.log(pathname)
-    const openkey=pathname.split('/')
+    const openkey=pathname.split('/')//自动展开
     // console.log(openkey)
-    const checkUI=openkey.slice(-1)
+    let checkUI=openkey.slice(-1)
+    if(openkey.indexOf('product') !== -1) checkUI = ['product']
     return (
       <div className="left">
         <div className="l-top">
@@ -79,7 +81,7 @@ class LeftNav extends Component {
         </div>
        
           <Menu
-            selectedKeys={checkUI}
+            selectedKeys={checkUI}//数组
             defaultOpenKeys={openkey}
             mode="inline"
             theme="dark"

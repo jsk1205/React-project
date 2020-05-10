@@ -25,3 +25,12 @@ import {CITY,WEATHER_AK} from '../config'
  }
  export const reqCategoryList = () => ajax.get('/manage/category/list')
  export const reqAddCategory=(categoryName)=>ajax.post('manage/category/add',{categoryName})
+ export const reqUpdateCategory=(categoryId,categoryName)=>ajax.post('/manage/category/update',{categoryId,categoryName})
+ export const reqProductList=(pageNum,pageSize)=>ajax.get('/manage/product/list',{params:{pageNum,pageSize}})
+ export const reqSearchList=(searchType,keyword,pageNum,pageSize) => ajax.get('/manage/product/search',{params:{[searchType]:keyword,pageNum,pageSize}})
+ export const reqUpdateProduct=(productId,status)=>ajax.post('/manage/product/updateStatus',{productId,status})
+ export const reqProductInfoById =(productId)=>ajax.get('/manage/product/info',{params:{productId}})
+
+ 
+
+
