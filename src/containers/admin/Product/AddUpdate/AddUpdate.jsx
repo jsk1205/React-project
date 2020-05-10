@@ -6,6 +6,7 @@ import {ArrowLeftOutlined} from '@ant-design/icons';
 import PictureWall from './PictureWall/PictureWall'
 const {Item}=Form
 const {Option}=Select 
+
 @connect(
   state=>({categoryList:state.categoryList}),
   {catrgoryAsync}
