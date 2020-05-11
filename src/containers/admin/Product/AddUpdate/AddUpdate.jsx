@@ -4,6 +4,7 @@ import {catrgoryAsync} from '@/redux/actions/category'
 import { Button,Card,Form,Input,Select } from "antd";
 import {ArrowLeftOutlined} from '@ant-design/icons';
 import PictureWall from './PictureWall/PictureWall'
+
 const {Item}=Form
 const {Option}=Select 
 
@@ -24,7 +25,7 @@ const {Option}=Select
       <Card title={
         <div>
           <Button  onClick={()=>{ this.props.history.goBack()}} type="link"> <ArrowLeftOutlined />返回</Button>
-          <span>添加</span>
+          <span>商品添加</span>
         </div>
       } >
       <Form initialValues={{categoryId:''}}
@@ -63,7 +64,8 @@ const {Option}=Select
           <Option value="">请选择分类</Option>
           {
             this.props.categoryList.map((categoryObj)=>{
-              return <Option key={categoryObj._id} value={categoryObj._id}>{categoryObj.name}</Option>
+              return <Option key={categoryObj._id} 
+              value={categoryObj._id}>{categoryObj.name}</Option>
             })
           }
         </Select>
@@ -80,7 +82,7 @@ const {Option}=Select
 					wrapperCol={{span:6}}
 					style={{marginLeft:'12px'}}
 				>
-						此处放置富文本编辑器
+					<PictureWall/>
 				</Item>
 				<Item>
 					<Button type="primary" htmlType="submit">提交</Button>

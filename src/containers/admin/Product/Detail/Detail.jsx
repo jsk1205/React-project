@@ -13,19 +13,21 @@ const {Item}=List
 )
 class Detail extends Component {
   state = {
-		currentProduct:{imgs:[]} //当前商品信息
+    currentProduct:{imgs:[]}, //当前商品信息
+    isLoading:true //标识是否处于加载中
 	}
-  //有则用无则添加
+  //有则用无则添加-->根据分类id查找分类名称
   findCategoryName=(id)=>{
     let result=this.props.categoryList.find((catgoryObj)=>{
       return catgoryObj._id===id
     })
     if(result) return result.name
   }
+  //根据id获得商品数据
   getProductInfo=async(id)=>{
     let result=await reqProductInfoById(id)
     const{status,data,msg}=result
-    if(status===0) this.setState({currentProduct:data})
+    if(status===0) this.setState({currentProduct:data,isLoading:false})
     else message.error(msg)
   }
   componentDidMount(){
@@ -34,12 +36,14 @@ class Detail extends Component {
     const {id} = match.params
     this.getProductInfo(id)
     //尝试获取categoryList 有则用无则添加
-    if(categoryList===0){catrgoryAsync()}
+    if(categoryList.length===0) {catrgoryAsync()}
   }
   render() {
     const {name,desc,price,categoryId,imgs,detail} = this.state.currentProduct
     return (
-      <Card title={
+      <Card 
+        loading={this.state.isLoading} 
+        title={
         <div>
           <Button 
           onClick={()=>{ this.props.history.goBack()}} 
@@ -63,15 +67,16 @@ class Detail extends Component {
           </Item>
           <Item className="item">
             <span className="title">商品分类:</span>
-            <span>{categoryId}</span>
+            <span>{this.findCategoryName(categoryId)}</span>
           </Item>
           <Item className="item">
             <span className="title">商品图片:</span>
-            <span>
-              {
-              imgs.map((imgName)=>{ return <img key={imgName} src={IMAGE_URL+imgName} alt=""/>})
-              }
-            </span>
+            {
+							imgs.map((imgName)=>{
+								return <img key={imgName} src={IMAGE_URL+imgName} alt="product"/>
+							})
+						}
+          
           </Item>
           <Item className="item">
             <span className="title">商品详情:</span>

@@ -9,7 +9,7 @@ localStorage.setItem('token',token)
 return {type:SAVE_USERINFO,data:userObj}
 }
 
-export const deteuserInfo=()=>{
+export const deleuserInfo=()=>{
   localStorage.clear()
   return {type:DELE_USERINFO}
 }

@@ -3,7 +3,7 @@ import axios from "axios"
 import qs from 'querystring'
 import { message as  msg} from "antd" //弹窗
 import store from "@/redux/store"
-import { deteuserInfo } from "@/redux/actions/login";
+import { deleuserInfo } from "@/redux/actions/login";
 import {saveTitle} from '@/redux/actions/title'
 import nprogress from 'nprogress'
 import  "nprogress/nprogress.css"
@@ -51,7 +51,7 @@ axios.interceptors.response.use(
 		const {message} = err
     if(message.indexOf('401') !== -1) {
     //强制退出回到login然后联系redux删除所有用户数据的信息,强制重新登录
-    store.dispatch(deteuserInfo())
+    store.dispatch(deleuserInfo())
     store.dispatch(saveTitle(''))
 
     errmsg = '未登录或身份过期，请重新登录！'

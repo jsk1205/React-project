@@ -30,7 +30,7 @@ import {CITY,WEATHER_AK} from '../config'
  export const reqSearchList=(searchType,keyword,pageNum,pageSize) => ajax.get('/manage/product/search',{params:{[searchType]:keyword,pageNum,pageSize}})
  export const reqUpdateProduct=(productId,status)=>ajax.post('/manage/product/updateStatus',{productId,status})
  export const reqProductInfoById =(productId)=>ajax.get('/manage/product/info',{params:{productId}})
-
+ export const reqDeletePicture =(name)=>ajax.post('/manage/img/delete',{name})
  
 
 

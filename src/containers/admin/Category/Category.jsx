@@ -17,7 +17,8 @@ const {Item} = Form
   showModal = (categoryObj) => {//展示弹窗-->修改分类-->传入参数修改
     //console.log(this.refs.categoryForm)
     //console.log(categoryObj)//{_id: "5dcd14b8b4441631746ee493", name: "智能手表", __v: 0}
-     this._id =''
+    const {categoryForm} = this.refs 
+    this._id =''
      this.name=''
      this.isUpdate=false
      const {_id,name}=categoryObj
@@ -28,8 +29,8 @@ const {Item} = Form
       this.isUpdate=true
       
      }
-     if(this.refs.categoryForm){
-      this.refs.categoryForm.setFieldsValue({name:this.name})
+     if(categoryForm){
+      categoryForm.setFieldsValue({name:this.name})
     }
     this.setState({
       visible: true,
@@ -105,10 +106,11 @@ const {Item} = Form
       {
         title: '操作',
         //dataIndex: 'name',
+        width:'20%',
         render:(categoryObj)=><Button onClick={()=>{
           this.showModal(categoryObj)}} type="link"> 修改分类</Button>,
         align:'center',
-        key: '2',
+        key: 'opera',
       },
      
     ];

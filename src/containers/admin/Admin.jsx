@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import { Switch,Route,Redirect } from "react-router-dom";
-import {deteuserInfo} from "../../redux/actions/login"; 
+import {deleuserInfo} from "../../redux/actions/login"; 
 import { Layout } from 'antd';
 import Check from "@/containers/Hoc/Check";
 import Header from "./Header/Header"
@@ -14,17 +14,17 @@ import Category from './Category/Category'
 import Bar from './Bar/Bar'
 import Line from './Line/Line'
 import Pie from './Pie/Pie'
-import  AddUpdate from "@/containers/admin/Product/AddUpdate/AddUpdate";
+import AddUpdate from "@/containers/admin/Product/AddUpdate/AddUpdate";
 import Detail from "@/containers/admin/Product/Detail/Detail";
 import './css/admin.less'
 
 const { Footer, Sider, Content } = Layout;
 @connect(
   state=>({//读取信息
-    username:state.userInfo.user.username,
+    //username:state.userInfo.user.username,
     isLogin:state.userInfo.isLogin
   }),
-  {deteuserInfo}
+  {deleuserInfo}
 )
 @Check
 class Admin extends Component {
@@ -54,7 +54,7 @@ class Admin extends Component {
 					<Content className='admin-content'>
             <Switch>
               <Route path="/admin/home" component={Home}/>
-							<Route path="/admin/prod_about/category" component={Category}/>
+							<Route path="/admin/prod_about/category"  component={Category}/>
 							<Route path="/admin/prod_about/product" exact component={Product}/>
 							<Route path="/admin/user" component={User}/>
 							<Route path="/admin/role" component={Role}/>

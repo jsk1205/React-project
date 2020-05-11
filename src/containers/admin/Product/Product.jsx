@@ -154,7 +154,7 @@ export default class Product extends Component {
         dataSource={dataSource}
         columns={columns} 
         bordered
-        rowKey="_id" 
+        rowKey="_id"
         pagination={{
           pageSize:PAGE_SIZE,
           total:this.state.total,
